@@ -1,21 +1,40 @@
 var db = require("../models");
 
 module.exports = function(app) {
-  // Load index page
-  app.get("/", function(req, res) {
-    db.Example.findAll({}).then(function(dbExamples) {
-      res.render("index", {
-        msg: "Welcome!",
-        examples: dbExamples
+//Load Purchases
+app.get("/", function(req, res) {
+  db.Purchase.findAll({}).then(function(dbPurchases) {
+    res.render("PurchaseIndex", {
+      msg: "Welcome To Your Purchase List!",
+      purchases: dbPurchases
+    });
+  });
+});
+
+//Load Purchase Page
+app.get("/purchase/:id", function(req, res) {
+  db.Purchase.findOne({ where: { id: req.params.id } }).then(function(dbPurchase) {
+    res.render("purchase", {
+      purchase: dbPurchase
+    });
+  });
+});
+
+
+  // Load example page
+  app.get("/bill", function(req, res) {
+    db.Bill.findAll({}).then(function(dbBills) {
+      res.render("billIndex", {
+        msg: "Welcome to Your Bill Page!",
+        bills: dbBills
       });
     });
   });
-
   // Load example page and pass in an example by id
-  app.get("/example/:id", function(req, res) {
-    db.Example.findOne({ where: { id: req.params.id } }).then(function(dbExample) {
-      res.render("example", {
-        example: dbExample
+  app.get("/bill/:id", function(req, res) {
+    db.Bill.findOne({ where: { id: req.params.id } }).then(function(dbBills) {
+      res.render("bill", {
+       bill: dbBills
       });
     });
   });

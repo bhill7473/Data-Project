@@ -1,0 +1,42 @@
+<div id="home">
+  <div class="container">
+    <div class="row">
+      <div class="col-8 offset-2">
+          <a href="/bill" ><h3>View Bills</h3></a>
+        <h1>{{msg}}</h1>
+        <h2>Your Purchases!</h2>
+        <form class="clearfix mb-4" action="POST">
+          <div class="form-group">
+            <label for="example-text">Purchase Name</label>
+            <input type="text" id="purchase-name" class="form-control" aria-describedby="purchase-name" placeholder="Purchase Name">
+          </div>
+          <div class="form-group">
+            <label for="example-description">Purchase Description</label>
+            <textarea class="form-control" id="purchase-description" aria-describedby="purchase-description" placeholder="Purchase Description"></textarea>
+          </div>
+           <div class="form-group">
+            <label for="example-text">Purchase Price</label>
+            <input type="text" id="purchase-price" class="form-control" aria-describedby="purchase-price" placeholder="Price of Purchase">
+          </div>
+          <div class="form-group">
+            <label for="example-description">Purchase Date</label>
+            <textarea class="form-control" id="purchase-date" aria-describedby="purchase-date" placeholder="Enter Purchase Date"></textarea>
+          </div>
+          <button id="submit-purchase" class="btn btn-primary float-right">Submit</button>
+        </form>
+        <h3>Purchases:</h3>
+        <ul id="purchase-list" class="list-group">
+          {{#each purchases}}
+          <li data-id="{{this.id}}" class="list-group-item">
+            <a href="purchase/{{this.id}}">{{this.name}}</a>
+            <button class="btn btn-danger float-right delete">ｘ</button>
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>

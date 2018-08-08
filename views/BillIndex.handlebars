@@ -1,0 +1,42 @@
+<div id="home">
+  <div class="container">
+    <div class="row">
+      <div class="col-8 offset-2">
+        <a href="/"><h3>View Purchases</h3></a>
+        <h1>{{msg}}</h1>
+        <h2>View Your Bills!</h2>
+        <form class="clearfix mb-4" action="POST">
+          <div class="form-group">
+            <label for="example-text">Name of Bill</label>
+            <input type="text" id="bill-name" class="form-control" aria-describedby="example-text" placeholder="Enter Example Text">
+          </div>
+          <div class="form-group">
+            <label for="example-description">Bill Description</label>
+            <textarea class="form-control" id="bill-description" aria-describedby="example-description" placeholder="Enter Example Description"></textarea>
+          </div>
+           <div class="form-group">
+            <label for="example-text">Amount of Bill</label>
+            <input type="text" id="bill-amount" class="form-control" aria-describedby="example-text" placeholder="Enter Example Text">
+          </div>
+          <div class="form-group">
+            <label for="example-description">Due Date</label>
+            <textarea class="form-control" id="bill-date" aria-describedby="example-description" placeholder="Enter Example Description"></textarea>
+          </div>
+          <button id="submit" class="btn btn-primary float-right">Submit</button>
+        </form>
+        <h3>Bills:</h3>
+        <ul id="bill-list" class="list-group">
+          {{#each bills}}
+          <li data-id="{{this.id}}" class="list-group-item">
+            <a href="bill/{{this.id}}">{{this.name}}</a>
+            <button class="btn btn-danger float-right delete">ｘ</button>
+          </li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>

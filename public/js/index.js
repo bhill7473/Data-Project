@@ -1,47 +1,85 @@
 // Get references to page elements
-var $exampleText = $("#example-text");
-var $exampleDescription = $("#example-description");
+var $billName = $("#bill-name");
+var $billDescription = $("#bill-description");
+var $billAmount = $("#bill-amount");
+var $billDate = $("#bill-date");
 var $submitBtn = $("#submit");
-var $exampleList = $("#example-list");
+var $billList = $("#bill-list");
+
+
+//Purchase Page Elements
+var $purchaseName = $("#purchase-name");
+var $purchaseDescription = $("#purchase-description");
+var $purchasePrice = $("#purchase-price");
+var $purchaseDate = $("#purchase-date");
+var $pSubmitBtn = $("#submit-purchase");
+var $purchaseList = $("#purchase-list");
 
 // The API object contains methods for each kind of request we'll make
-var API = {
-  saveExample: function(example) {
+var BILLAPI = {
+  saveBill: function(example) {
     return $.ajax({
       headers: {
         "Content-Type": "application/json"
       },
       type: "POST",
-      url: "api/examples",
+      url: "api/bills",
       data: JSON.stringify(example)
     });
   },
-  getExamples: function() {
+  getBills: function() {
     return $.ajax({
-      url: "api/examples",
+      url: "api/bills",
       type: "GET"
     });
   },
-  deleteExample: function(id) {
+  deleteBill: function(id) {
     return $.ajax({
-      url: "api/examples/" + id,
+      url: "api/bills/" + id,
       type: "DELETE"
     });
   }
 };
 
+var PURCHASEAPI = {
+
+  getPurchases: function() {
+    return $.ajax({
+      url: "api/purchases",
+      type: "GET"
+    });
+  },
+  savePurchase: function(example) {
+    return $.ajax({
+      headers: {
+        "Content-Type": "application/json"
+      },
+      type: "POST",
+      url: "api/purchases",
+      data: JSON.stringify(example)
+    });
+  },
+  deletePurchase: function(id) {
+    return $.ajax({
+      url: "api/purchases/" + id,
+      type: "DELETE"
+    });
+  }
+
+};
+
 // refreshExamples gets new examples from the db and repopulates the list
-var refreshExamples = function() {
-  API.getExamples().then(function(data) {
-    var $examples = data.map(function(example) {
+var refreshBills = function() {
+  BILLAPI.getBills().then(function(data) {
+    var $bills = data.map(function(bill) {
       var $a = $("<a>")
-        .text(example.text)
-        .attr("href", "/example/" + example.id);
+        .text(bill.name)
+        .attr("href", "/example/" + bill.id);
 
       var $li = $("<li>")
         .attr({
           class: "list-group-item",
-          "data-id": example.id
+          "data-id": bill.id
         })
         .append($a);
 
@@ -54,46 +92,126 @@ var refreshExamples = function() {
       return $li;
     });
 
-    $exampleList.empty();
-    $exampleList.append($examples);
+    $billList.empty();
+    $billList.append($bills);
   });
 };
 
+
+//Get new Purchases from the db and repopulate the list
+var refreshPurchases = function() {
+  PURCHASEAPI.getPurchases().then(function(data) {
+    var $purchases = data.map(function(purchase) {
+      var $a = $("<a>")
+        .text(purchase.name)
+        .attr("href", "/purchase/" + purchase.id);
+
+      var $li = $("<li>")
+        .attr({
+          class: "list-group-item",
+          "data-id": purchase.id
+        })
+        .append($a);
+
+      var $button = $("<button>")
+        .addClass("btn btn-danger float-right delete")
+        .text("ｘ");
+
+      $li.append($button);
+
+      return $li;
+    });
+
+    $purchaseList.empty();
+    $purchaseList.append($purchases);
+  });
+};
+
+
 // handleFormSubmit is called whenever we submit a new example
 // Save the new example to the db and refresh the list
-var handleFormSubmit = function(event) {
+var handleBillSubmit = function(event) {
   event.preventDefault();
 
-  var example = {
-    text: $exampleText.val().trim(),
-    description: $exampleDescription.val().trim()
+  var bill = {
+    name: $billName.val().trim(),
+    description: $billDescription.val().trim(),
+    amount: $billAmount.val().trim(),
+    date: $billDate.val().trim()
   };
 
-  if (!(example.text && example.description)) {
+  if (!(bill.name && bill.description && bill.amount && bill.date)) {
     alert("You must enter an example text and description!");
     return;
   }
 
-  API.saveExample(example).then(function() {
-    refreshExamples();
+  BILLAPI.saveBill(bill).then(function() {
+    refreshBills();
   });
 
-  $exampleText.val("");
-  $exampleDescription.val("");
+  $billName.val("");
+  $billDescription.val("");
+  $billAmount.val("");
+  $billDate.val("");
+};
+
+
+///Submission of Purchase
+var handlePurchaseSubmit = function(event) {
+  event.preventDefault();
+
+  var purchase = {
+    name: $purchaseName.val().trim(),
+    description: $purchaseDescription.val().trim(),
+    price: $purchasePrice.val().trim(),
+    date: $purchaseDate.val().trim()
+  };
+
+  if (
+    !(purchase.name && purchase.description && purchase.price && purchase.date)
+  ) {
+    alert("You must enter an example text and description!");
+    return;
+  }
+
+  PURCHASEAPI.savePurchase(purchase).then(function() {
+    refreshPurchases();
+  });
+
+  $purchaseName.val("");
+  $purchaseDescription.val("");
+  $purchasePrice.val("");
+  $purchaseDate.val("");
 };
 
 // handleDeleteBtnClick is called when an example's delete button is clicked
 // Remove the example from the db and refresh the list
-var handleDeleteBtnClick = function() {
+var handleDeleteBill = function() {
   var idToDelete = $(this)
     .parent()
     .attr("data-id");
 
-  API.deleteExample(idToDelete).then(function() {
-    refreshExamples();
+  BILLAPI.deleteBill(idToDelete).then(function() {
+    refreshBills();
   });
 };
 
+//Delete Purchase
+var handleDeletePurchase = function() {
+  var idToDelete = $(this)
+    .parent()
+    .attr("data-id");
+
+  PURCHASEAPI.deletePurchase(idToDelete).then(function() {
+    refreshPurchases();
+  });
+};
+
+
 // Add event listeners to the submit and delete buttons
-$submitBtn.on("click", handleFormSubmit);
-$exampleList.on("click", ".delete", handleDeleteBtnClick);
+$submitBtn.on("click", handleBillSubmit);
+$billList.on("click", ".delete", handleDeleteBill);
+
+//Listeners for Purchase Page
+$pSubmitBtn.on("click", handlePurchaseSubmit);
+$purchaseList.on("click", ".delete", handleDeletePurchase);
