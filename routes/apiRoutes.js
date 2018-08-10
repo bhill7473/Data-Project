@@ -7,11 +7,20 @@ module.exports = function(app) {
       res.json(dbBills);
     });
   });
+  //get total of all bills
+  app.get("/api/billsTotal", function(req, res) {
 
+    });
+  });
   //Get all Purchases
   app.get("/api/purchases", function(req, res) {
     db.Purchase.findAll({}).then(function(dbPurchases) {
       res.json(dbPurchases);
+    });
+  });
+  //Get total of all purchases
+  app.get("/api/purchasesTotal", function(req, res) {
+
     });
   });
   // Create a new example

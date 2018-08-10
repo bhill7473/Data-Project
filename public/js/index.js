@@ -33,6 +33,13 @@ var BILLAPI = {
       type: "GET"
     });
   },
+  getBillsTotal: function(){
+    return $.ajax({
+    url: "api/billsTotal",
+    type: "GET"
+
+  });
+  },
   deleteBill: function(id) {
     return $.ajax({
       url: "api/bills/" + id,
@@ -46,6 +53,12 @@ var PURCHASEAPI = {
   getPurchases: function() {
     return $.ajax({
       url: "api/purchases",
+      type: "GET"
+    });
+  },
+  getPurchasesTotal: function() {
+    return $.ajax({
+      url: "api/purchasesTotal",
       type: "GET"
     });
   },
@@ -68,6 +81,17 @@ var PURCHASEAPI = {
 
 };
 
+//Total of all your bills
+//counter to hold total
+var totalAmount = 0;
+var totalBills = function(){
+  BILLAPI.getBillsTotal().then(function(data){
+  
+
+  })
+
+}
+
 // refreshExamples gets new examples from the db and repopulates the list
 var refreshBills = function() {
   BILLAPI.getBills().then(function(data) {
@@ -76,16 +100,18 @@ var refreshBills = function() {
         .text(bill.name)
         .attr("href", "/example/" + bill.id);
 
+      var $p = $("<p>").text("Amount due is: $" + bill.amount);
+
       var $li = $("<li>")
         .attr({
           class: "list-group-item",
           "data-id": bill.id
         })
-        .append($a);
+        .append($a).append($p);
 
       var $button = $("<button>")
-        .addClass("btn btn-danger float-right delete")
-        .text("ｘ");
+        .addClass("btn btn-success float-right delete")
+        .text("Pay Bill");
 
       $li.append($button);
 
@@ -106,16 +132,18 @@ var refreshPurchases = function() {
         .text(purchase.name)
         .attr("href", "/purchase/" + purchase.id);
 
+      var $p = $("<p>").text("Price of Purchase: $" + purchase.price);
+
       var $li = $("<li>")
         .attr({
           class: "list-group-item",
           "data-id": purchase.id
         })
-        .append($a);
+        .append($a).append($p);
 
       var $button = $("<button>")
         .addClass("btn btn-danger float-right delete")
-        .text("ｘ");
+        .text("Remove Purchase");
 
       $li.append($button);
 

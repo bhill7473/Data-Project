@@ -5,7 +5,7 @@ module.exports = function(app) {
 app.get("/", function(req, res) {
   db.Purchase.findAll({}).then(function(dbPurchases) {
     res.render("PurchaseIndex", {
-      msg: "Welcome To Your Purchase List!",
+      msg: "Welcome{USER NAME}! Here are your purchases",
       purchases: dbPurchases
     });
   });
@@ -25,7 +25,7 @@ app.get("/purchase/:id", function(req, res) {
   app.get("/bill", function(req, res) {
     db.Bill.findAll({}).then(function(dbBills) {
       res.render("billIndex", {
-        msg: "Welcome to Your Bill Page!",
+        msg: "Welcome{USER NAME}! here are your bills",
         bills: dbBills
       });
     });
