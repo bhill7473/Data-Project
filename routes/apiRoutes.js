@@ -9,7 +9,9 @@ module.exports = function(app) {
   });
   //get total of all bills
   app.get("/api/billsTotal", function(req, res) {
-
+    db.Bill.query("SELECT SUM 'amount' FROM 'Bills'").then(function(billTotal){
+    console.log(billTotal)
+    res.json(billTotal)
     });
   });
   //Get all Purchases
@@ -21,7 +23,7 @@ module.exports = function(app) {
   //Get total of all purchases
   app.get("/api/purchasesTotal", function(req, res) {
 
-    });
+
   });
   // Create a new example
   app.post("/api/bills", function(req, res) {
